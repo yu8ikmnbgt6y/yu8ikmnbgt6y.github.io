@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>1文字ごとの描画位置の取得サンプル</title>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        // ************自由に変えて試してみてください**********
+        const sample_text = 'Hello world';
+        const font_size = 30;
+        const font_name = "Arial"
+        // **************************************************
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const font_txt = `${font_size}px ${font_name}`;
+        ctx.strokeStyle = 'red'
+        ctx.fillStyle = 'black'
+
+        ctx.font = font_txt;
+
+        let measured_text_length = ctx.measureText(sample_text);
+        console.log(`文字列の右端の位置はx=${measured_text_length.width}`);  // 56;
+
+        let sum_length = 0
+        
+        for (let i=0; i < sample_text.length; i++){
+            const char = sample_text.charAt(i);
+            const charWidth = ctx.measureText(char).width;
+
+            //一文字ずつ描画します。
+            ctx.fillText(char, sum_length, font_size);
+            ctx.strokeRect(sum_length, 0, charWidth, font_size)
+
+            sum_length += charWidth;
+            console.log(`${i+1}文字目の右端の位置は x=${sum_length}`)
+        }
+    </script>
+
+</body>
+
+</html>
