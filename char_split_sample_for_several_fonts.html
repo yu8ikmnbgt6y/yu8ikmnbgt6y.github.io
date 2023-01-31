@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>1文字ごとの描画位置の取得サンプル</title>
+    <style>
+        label {
+            float: left;
+            width: 15rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvases">
+    </div>
+
+    <script>
+        // **************************************************
+        const canvases = document.getElementById('canvases');
+        const font_list = [
+            'Arial', 'Helvetica', 'Times New Roman', 'MS Gothic', 'MS PMincho', 'serif', 'Segoe UI',
+            'Verdana', 'San Francisco', 'Yu Gothic', 'Meiryo', 'Hiragino Sans', 'Osaka']
+
+        const sample_text = 'Hello world';
+        const font_size = 50;
+
+        for (let font_name of font_list) {
+            const font_block = document.createElement('div')
+
+            let font_name_label = document.createElement('label')
+            font_name_label.textContent = `${font_name}:`
+
+            font_block.appendChild(font_name_label)
+
+            let canvas = document.createElement('canvas')
+            canvas.height = font_size
+            const ctx = canvas.getContext('2d');
+            const font_txt = `${font_size}px ${font_name}`;
+            ctx.strokeStyle = 'red'
+            ctx.fillStyle = 'black'
+
+            ctx.font = font_txt;
+
+            let measured_text_length = ctx.measureText(sample_text);
+            //console.log(`文字列の右端の位置はx=${measured_text_length.width}`);  // 56;
+
+            let sum_length = 0
+
+            for (let i = 0; i < sample_text.length; i++) {
+                const char = sample_text.charAt(i);
+                const charWidth = ctx.measureText(char).width;
+
+                //一文字ずつ描画します。
+                ctx.fillText(char, sum_length, font_size);
+                ctx.strokeRect(sum_length, 0, charWidth, font_size)
+
+                sum_length += charWidth;
+                //console.log(`${i+1}文字目の右端の位置は x=${sum_length}`)
+            }
+            font_block.appendChild(canvas)
+            let hr = document.createElement('hr')
+            font_block.append(hr)
+            canvases.appendChild(font_block)
+        }
+    </script>
+
+</body>
+
+</html>
